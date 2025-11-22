@@ -1,4 +1,0 @@
-SpeechRecognition
-PyAudio
-pytesseract==0.3.13
-numpy==2.3.4
