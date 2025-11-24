@@ -64,7 +64,7 @@ class Pioneer3DXController:
         self.delay_counter = 0
         
         # OCR configuration
-        self.ocr_interval = 10  # Process OCR every N iterations
+        self.ocr_interval = 100 # Process OCR every N iterations
         self.ocr_counter = 0
         self.last_recognized_text = ""
         
