@@ -1,5 +1,5 @@
 SpeechRecognition==3.14.4 
-PyAudio
+PyAudio==0.2.14
 pytesseract==0.3.13
 numpy==2.3.4
 pipwin==0.5.2 
