@@ -9,10 +9,11 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/advertising_board/protos/AdvertisingBoard.proto"
 
 WorldInfo {
+  basicTimeStep 64
 }
 Viewpoint {
-  orientation -0.5792651744253934 0.5792651581272686 0.5735012940505968 2.1001830931205707
-  position -2.2147609627578344 -3.1917522724255654 13.492870202433583
+  orientation -0.5773521463339373 0.5773445264766688 0.5773541347137189 2.0944097015063066
+  position -3.490998534898647 0.5772690975616892 29.58524444927388
 }
 TexturedBackground {
 }
@@ -153,12 +154,9 @@ Door {
   }
 }
 Robot {
-  translation 1.00898 -3.80288 0.074492
-  rotation 0 0 1 1.52662
+  translation -1.9417 -3.60542 -3.55271e-15
+  rotation 0 0 1 -0.044179393899574704
   children [
-    Compass {
-      name "compass1"
-    }
     Compass {
     }
     GPS {
@@ -170,7 +168,7 @@ Robot {
       height 480
     }
     Lidar {
-      translation 0.2 0 0.2
+      translation 0.2 0 0.3
       fieldOfView 3.14
       numberOfLayers 1
       maxRange 20
@@ -706,7 +704,7 @@ Robot {
       }
       endPoint Solid {
         translation -0.1918 0 0
-        rotation 0.9942512168286033 0.07571165120674032 0.07571171445945797 1.5765616112706118
+        rotation 0.9942512168286033 0.07571165120674021 0.07571171445945787 1.5765616112706122
         children [
           DEF casterWheelRim HingeJoint {
             jointParameters HingeJointParameters {
@@ -3193,7 +3191,6 @@ Robot {
     ]
   }
   controller "Loop_test"
-  supervisor TRUE
 }
 Wall {
   translation -0.217648 1.13176 -1.68754e-13
