@@ -1,0 +1,44 @@
+{
+  "nodes": [
+    {
+      "name": "corner_se",
+      "type": "corner",
+      "position": [1.0, -3.0]
+    },
+    {
+      "name": "corner_ne",
+      "type": "corner",
+      "position": [1.0, 6.0]
+    },
+    {
+      "name": "corner_nw",
+      "type": "corner",
+      "position": [-8.0, 6.0]
+    },
+    {
+      "name": "corner_sw",
+      "type": "corner",
+      "position": [-8.0, -3.0]
+    },
+    {
+      "name": "door_101",
+      "type": "door",
+      "position": [-1.6, 6.0],
+      "room_number": 101
+    },
+    {
+      "name": "door_102",
+      "type": "door",
+      "position": [-3.85, -3.0],
+      "room_number": 102
+    }
+  ],
+  "edges": [
+    ["corner_se", "corner_ne"],
+    ["corner_ne", "door_101"],
+    ["door_101", "corner_nw"],
+    ["corner_nw", "corner_sw"],
+    ["corner_sw", "door_102"],
+    ["door_102", "corner_se"]
+  ]
+}

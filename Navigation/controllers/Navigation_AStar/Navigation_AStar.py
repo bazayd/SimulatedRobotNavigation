@@ -394,7 +394,7 @@ print("GRAPH-BASED NAVIGATION TO DESTINATION")
 print("="*60)
 
 # ========== SET YOUR DESTINATION HERE ==========
-DESTINATION = "corner_nw"  # OPTIONS: corner_se, corner_ne, corner_nw, corner_sw
+DESTINATION = "corner_sw"  # OPTIONS: corner_se, corner_ne, corner_nw, corner_sw
 # ================================================
 
 print(f"\nDESTINATION: {DESTINATION}")
