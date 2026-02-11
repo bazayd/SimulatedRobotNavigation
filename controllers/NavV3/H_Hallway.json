@@ -1,0 +1,22 @@
+{
+  "hallways": [
+    {
+      "name": "left_vertical",
+      "start": [-25.0, 7.0],
+      "end": [-25.0, 19.0],
+      "doors": []
+    },
+    {
+      "name": "crossbar",
+      "start": [-25.0, 12.5],
+      "end": [-18.5, 12.5],
+      "doors": []
+    },
+    {
+      "name": "right_vertical",
+      "start": [-18.5, 7.0],
+      "end": [-18.5, 19.0],
+      "doors": []
+    }
+  ]
+}

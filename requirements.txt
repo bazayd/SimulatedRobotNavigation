@@ -1,5 +1,7 @@
-SpeechRecognition==3.14.4 
+SpeechRecognition==3.14.4
 PyAudio==0.2.14
 pytesseract==0.3.13
 numpy==2.3.4
-pipwin==0.5.2 
+pipwin==0.5.2
+Pillow==11.1.0
+opencv-python==4.11.0.86

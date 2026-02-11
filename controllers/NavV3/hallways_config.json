@@ -1,0 +1,40 @@
+{
+  "hallways": [
+    {
+      "name": "south_hall",
+      "start": [-8.0, -3.0],
+      "end": [1.0, -3.0],
+      "doors": [
+        {
+          "position": [-3.85, -3.0],
+          "room": 102,
+          "side": "south"
+        }
+      ]
+    },
+    {
+      "name": "north_hall",
+      "start": [1.0, 6.0],
+      "end": [-8.0, 6.0],
+      "doors": [
+        {
+          "position": [-1.6, 6.0],
+          "room": 101,
+          "side": "south"
+        }
+      ]
+    },
+    {
+      "name": "east_hall",
+      "start": [1.0, -3.0],
+      "end": [1.0, 6.0],
+      "doors": []
+    },
+    {
+      "name": "west_hall",
+      "start": [-8.0, 6.0],
+      "end": [-8.0, -3.0],
+      "doors": []
+    }
+  ]
+}
