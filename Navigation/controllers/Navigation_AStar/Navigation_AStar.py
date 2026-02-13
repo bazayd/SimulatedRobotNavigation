@@ -1,6 +1,21 @@
 from controller import Robot
 import math
 import heapq
+import threading
+import re
+
+# ---- Voice (SpeechRecognition) ----
+try:
+    import speech_recognition as sr  # type: ignore
+    SR_AVAILABLE = True
+except Exception:
+    SR_AVAILABLE = False
+
+# === voice config ===
+USE_VOICE = True              # set False to disable voice control
+VOICE_PHRASE_TIME_LIMIT = 3   # seconds per chunk
+CALIBRATE_SECONDS = 1.0       # ambient noise calibration time on startup
+GOOGLE_RECOGNIZER = True      # use online Google recognizer (requires internet)
 
 # =============================================================================
 # NODES - 4 CORNERS
@@ -10,6 +25,28 @@ NODES = {
     "corner_ne": (1.0, 6.0),
     "corner_nw": (-8.0, 6.0),
     "corner_sw": (-8.0, -3.0)
+}
+
+DESTINATION_ALIASES = {
+    "corner_se": "corner_se",
+    "corner ne": "corner_ne",
+    "corner_ne": "corner_ne",
+    "corner nw": "corner_nw",
+    "corner_nw": "corner_nw",
+    "corner sw": "corner_sw",
+    "corner_sw": "corner_sw",
+    "north east": "corner_ne",
+    "northeast": "corner_ne",
+    "ne": "corner_ne",
+    "north west": "corner_nw",
+    "northwest": "corner_nw",
+    "nw": "corner_nw",
+    "south east": "corner_se",
+    "southeast": "corner_se",
+    "se": "corner_se",
+    "south west": "corner_sw",
+    "southwest": "corner_sw",
+    "sw": "corner_sw",
 }
 
 # Graph edges - which corners connect to which
@@ -59,6 +96,111 @@ def astar(start_node, goal_node):
     path.reverse()
     
     return path
+
+# =============================================================================
+# VOICE CONTROL
+# =============================================================================
+class VoiceNavigator:
+    def __init__(self):
+        self.available = SR_AVAILABLE and USE_VOICE
+        self.recognizer = None
+        self.microphone = None
+        self.stopper = None
+        self.lock = threading.Lock()
+
+        self.last_destination = None
+        self.last_action = None  # 'stop' | 'resume'
+        self.last_text = ""
+
+    def start(self):
+        if not self.available:
+            print("[Voice] SpeechRecognition not available; skipping voice control.")
+            return
+        try:
+            self.recognizer = sr.Recognizer()
+            self.microphone = sr.Microphone()
+            with self.microphone as source:
+                print("[Voice] Calibrating microphone noise floor...")
+                self.recognizer.adjust_for_ambient_noise(source, duration=CALIBRATE_SECONDS)
+                print("[Voice] Calibration done. Listening...")
+            self.stopper = self.recognizer.listen_in_background(
+                self.microphone, self._callback, phrase_time_limit=VOICE_PHRASE_TIME_LIMIT
+            )
+        except Exception as e:
+            print(f"[Voice] Failed to start listener: {e}")
+            self.available = False
+
+    def stop(self):
+        if self.stopper:
+            self.stopper(wait_for_stop=False)
+
+    def _callback(self, recognizer, audio):
+        try:
+            if GOOGLE_RECOGNIZER:
+                text = recognizer.recognize_google(audio)
+            else:
+                text = recognizer.recognize_sphinx(audio)
+        except sr.UnknownValueError:
+            return
+        except sr.RequestError as e:
+            print(f"[Voice] Recognizer request error: {e}")
+            return
+        except Exception as e:
+            print(f"[Voice] Recognizer error: {e}")
+            return
+
+        if not text:
+            return
+        text = text.lower().strip()
+        with self.lock:
+            self.last_text = text
+        self._interpret(text)
+
+    def _interpret(self, text: str):
+        if re.search(r"\b(stop|halt|pause|freeze)\b", text):
+            with self.lock:
+                self.last_action = "stop"
+            print("[Voice] → Pause")
+            return
+        if re.search(r"\b(resume|continue|start)\b", text):
+            with self.lock:
+                self.last_action = "resume"
+            print("[Voice] → Resume")
+            return
+
+        destination = self._parse_destination(text)
+        if destination:
+            with self.lock:
+                self.last_destination = destination
+            print(f"[Voice] → Destination: {destination}")
+
+    def _parse_destination(self, text: str):
+        for alias, node in DESTINATION_ALIASES.items():
+            if re.search(rf"\b{re.escape(alias)}\b", text):
+                return node
+
+        if "corner" in text:
+            if "north" in text and "east" in text:
+                return "corner_ne"
+            if "north" in text and "west" in text:
+                return "corner_nw"
+            if "south" in text and "east" in text:
+                return "corner_se"
+            if "south" in text and "west" in text:
+                return "corner_sw"
+        return None
+
+    def consume_destination(self):
+        with self.lock:
+            dest = self.last_destination
+            self.last_destination = None
+            return dest
+
+    def consume_action(self):
+        with self.lock:
+            action = self.last_action
+            self.last_action = None
+            return action
 
 # =============================================================================
 # ROBOT SETUP
@@ -202,11 +344,47 @@ def get_wall_distances():
     return left_min, right_min    
     
 
+VOICE = None
+CONTROL = None
+
 def stop():
     left_motor.setVelocity(0)
     right_motor.setVelocity(0)
     for _ in range(5):
         robot.step(timestep)
+
+def update_control_from_voice():
+    if VOICE is None or not VOICE.available:
+        return False
+
+    action = VOICE.consume_action()
+    if action == "stop":
+        CONTROL["paused"] = True
+        stop()
+        print("[Voice] Navigation paused")
+    elif action == "resume":
+        CONTROL["paused"] = False
+        print("[Voice] Navigation resumed")
+
+    destination = VOICE.consume_destination()
+    if destination and destination != CONTROL["destination"]:
+        CONTROL["destination"] = destination
+        CONTROL["replan"] = True
+        CONTROL["paused"] = False  # Unpause when new destination is set
+        print(f"[Voice] New destination set: {destination}")
+        return True
+
+    return False
+
+def pause_if_needed():
+    while CONTROL["paused"]:
+        left_motor.setVelocity(0)
+        right_motor.setVelocity(0)
+        if robot.step(timestep) == -1:
+            return False
+        if update_control_from_voice():
+            break  # New destination set, exit pause but continue program
+    return True
 
 def check_heading_to_target(target_pos):
     """Check if we're moving directly towards the target"""
@@ -228,6 +406,10 @@ def check_heading_to_target(target_pos):
     desired_heading = math.atan2(dy_desired, dx_desired)
     
     for _ in range(30):
+        if update_control_from_voice():
+            return False, 999
+        if not pause_if_needed():
+            return False, 999
         if check_any_obstacle():
             print(f"    Obstacle detected during heading check!")
             stop()
@@ -263,6 +445,10 @@ def turn_until_facing_target(target_pos):
     attempt = 0
     
     while attempt < max_attempts:
+        if update_control_from_voice():
+            return False
+        if not pause_if_needed():
+            return False
         attempt += 1
         
         is_aligned, heading_error = check_heading_to_target(target_pos)
@@ -278,11 +464,19 @@ def turn_until_facing_target(target_pos):
         
         if heading_error > 0:
             for _ in range(turn_steps):
+                if update_control_from_voice():
+                    return False
+                if not pause_if_needed():
+                    return False
                 left_motor.setVelocity(-1.5)
                 right_motor.setVelocity(1.5)
                 robot.step(timestep)
         else:
             for _ in range(turn_steps):
+                if update_control_from_voice():
+                    return False
+                if not pause_if_needed():
+                    return False
                 left_motor.setVelocity(1.5)
                 right_motor.setVelocity(-1.5)
                 robot.step(timestep)
@@ -301,6 +495,10 @@ def drive_to_node(target_pos, name):
     last_check = 0
     
     while robot.step(timestep) != -1 and step < max_steps:
+        if update_control_from_voice():
+            return False
+        if not pause_if_needed():
+            return False
         step += 1
         
         current_pos = get_position()
@@ -329,7 +527,8 @@ def drive_to_node(target_pos, name):
             
             # Re-orient towards target
             print(f"    Re-orienting...")
-            turn_until_facing_target(target_pos)
+            if not turn_until_facing_target(target_pos):
+                return False
             
             last_check = step
             continue
@@ -343,7 +542,8 @@ def drive_to_node(target_pos, name):
             
             if not is_aligned:
                 print(f"    Drifted off course! Re-orienting...")
-                turn_until_facing_target(target_pos)
+                if not turn_until_facing_target(target_pos):
+                    return False
         
         # Base speed
         base_speed = min(2.5, dist * 1.5)
@@ -393,60 +593,114 @@ print("="*60)
 print("GRAPH-BASED NAVIGATION TO DESTINATION")
 print("="*60)
 
-# ========== SET YOUR DESTINATION HERE ==========
+# ========== DEFAULT DESTINATION ==========
 DESTINATION = "corner_sw"  # OPTIONS: corner_se, corner_ne, corner_nw, corner_sw
-# ================================================
+# =========================================
 
-print(f"\nDESTINATION: {DESTINATION}")
+# Voice control setup
+VOICE = VoiceNavigator()
+VOICE.start()
+CONTROL = {
+    "paused": False,
+    "destination": DESTINATION,
+    "replan": False,
+}
 
-# Find current position
-start_pos = get_position()
-print(f"Current position: ({start_pos[0]:.2f}, {start_pos[1]:.2f})")
+if VOICE.available:
+    print("Voice control active. Say: 'corner ne', 'corner sw', 'pause', 'resume'.")
 
-# Find nearest node
-nearest_node, dist_to_nearest = find_nearest_node()
-print(f"Nearest node: {nearest_node} (distance: {dist_to_nearest:.2f}m)")
+while True:
+    if robot.step(timestep) == -1:
+        break
 
-# If far from any node, go to nearest first
-if dist_to_nearest > 1.0:
-    print(f"\nGoing to {nearest_node} first...")
-    target_pos = NODES[nearest_node]
-    turn_until_facing_target(target_pos)
-    drive_to_node(target_pos, nearest_node)
-    # Update nearest node
-    nearest_node = nearest_node
+    update_control_from_voice()
+    if not pause_if_needed():
+        break
 
-# Find path using A*
-path = astar(nearest_node, DESTINATION)
+    DESTINATION = CONTROL["destination"]
+    CONTROL["replan"] = False
 
-if path is None:
-    print(f"\nERROR: No path found from {nearest_node} to {DESTINATION}!")
-else:
-    print(f"\nPlanned path: {' -> '.join(path)}")
-    print("="*60)
-    
-    # Navigate along the path
-    for i in range(len(path)-1):
-        current_node = path[i]
-        next_node = path[i+1]
-        
-        next_pos = NODES[next_node]
-        
-        print(f"\n[{i+1}/{len(path)-1}] {current_node} -> {next_node}")
-        
-        # Turn and drive to next node
-        turn_until_facing_target(next_pos)
-        success = drive_to_node(next_pos, next_node)
-        
-        if not success:
-            print("Navigation failed!")
-            break
-        
-        for _ in range(30):
-            robot.step(timestep)
-    
-    print("\n" + "="*60)
-    print(f"REACHED DESTINATION: {DESTINATION}")
-    print("="*60)
+    print(f"\nDESTINATION: {DESTINATION}")
+
+    # Find current position
+    start_pos = get_position()
+    print(f"Current position: ({start_pos[0]:.2f}, {start_pos[1]:.2f})")
+
+    # Find nearest node
+    nearest_node, dist_to_nearest = find_nearest_node()
+    print(f"Nearest node: {nearest_node} (distance: {dist_to_nearest:.2f}m)")
+
+    # If far from any node, go to nearest first
+    if dist_to_nearest > 1.0:
+        print(f"\nGoing to {nearest_node} first...")
+        target_pos = NODES[nearest_node]
+        if not turn_until_facing_target(target_pos):
+            continue
+        if not drive_to_node(target_pos, nearest_node):
+            continue
+
+    # Replan requested mid-way
+    if CONTROL["replan"]:
+        continue
+
+    # Check if already at destination
+    if nearest_node == DESTINATION:
+        print(f"\nAlready at destination: {DESTINATION}")
+        print("="*60)
+        CONTROL["paused"] = True
+        print("Waiting for next destination (voice) or say 'resume' to continue.")
+        continue
+
+    # Find path using A*
+    path = astar(nearest_node, DESTINATION)
+
+    if path is None:
+        print(f"\nERROR: No path found from {nearest_node} to {DESTINATION}!")
+        CONTROL["paused"] = True
+        continue
+    else:
+        print(f"\nPlanned path: {' -> '.join(path)}")
+        print("="*60)
+
+        # Navigate along the path
+        for i in range(len(path) - 1):
+            if CONTROL["replan"]:
+                break
+
+            current_node = path[i]
+            next_node = path[i + 1]
+
+            next_pos = NODES[next_node]
+
+            print(f"\n[{i + 1}/{len(path) - 1}] {current_node} -> {next_node}")
+
+            # Turn and drive to next node
+            if not turn_until_facing_target(next_pos):
+                break
+            success = drive_to_node(next_pos, next_node)
+
+            if not success:
+                print("Navigation interrupted.")
+                break
+
+            for _ in range(30):
+                if update_control_from_voice():
+                    break
+                if not pause_if_needed():
+                    break
+                if robot.step(timestep) == -1:
+                    break
+
+        if CONTROL["replan"]:
+            continue
+
+        print("\n" + "="*60)
+        print(f"REACHED DESTINATION: {DESTINATION}")
+        print("="*60)
+
+        CONTROL["paused"] = True
+        print("Waiting for next destination (voice) or say 'resume' to continue.")
 
 stop()
+if VOICE and VOICE.available:
+    VOICE.stop()
