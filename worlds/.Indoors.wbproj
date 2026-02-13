@@ -8,6 +8,6 @@ centralWidgetVisible: 1
 projectionMode: PERSPECTIVE
 renderingMode: PLAIN
 orthographicViewHeight: 24.9096
-textFiles: 0 "controllers/SpeechRecognition/SpeechRecognition.py"
+textFiles: 0 "../controllers/SpeechRecognition/SpeechRecognition.py"
 globalOptionalRendering: LidarRaysPaths::LidarPointClouds
 renderingDevicePerspectives: Pioneer 3-DX:camera;0;0.04;0;0

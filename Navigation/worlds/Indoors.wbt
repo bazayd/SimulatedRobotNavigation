@@ -12,8 +12,8 @@ WorldInfo {
   basicTimeStep 64
 }
 Viewpoint {
-  orientation -0.5773538751157916 0.5773377437974568 0.5773591884396062 2.0944227860829328
-  position -21.10507911034635 12.963202389922 28.95378119857682
+  orientation -0.56222927763148 0.5455957441976315 0.6214688433762522 2.0562437406529086
+  position -9.093559966467346 4.43260808649041 85.60584600979249
 }
 TexturedBackground {
 }
@@ -24,46 +24,61 @@ Floor {
   size 30 24
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation -9.66456 -1.52058 3.73035e-14
   rotation 0 0 -1 5.16191e-08
   name "door208"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation -0.299841 3.50935 1.59872e-14
   rotation 0 0 -1 0.019635
   name "door215"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation 1.21956 7.2612 1.5099e-13
   rotation 0 0 -1 1.56588
   name "Door200"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation -3.27341 7.28998 1.58095e-13
   rotation 0 0 -1 1.56588
   name "door202"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation 2.39414 3.57731 -7.94032e-13
   rotation 0 0 -1 3.13178
   name "door218"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
@@ -134,7 +149,7 @@ AdvertisingBoard {
   rotation 0 0 -1 1.56106
   name "Room200(1)"
   frontTexture [
-    "../textures/Rom_101.png"
+    "../textures/101.png"
   ]
   displayWidth 0.6
   displayHeight 0.4
@@ -156,89 +171,116 @@ AdvertisingBoard {
   baseRatio 2.6
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation 0.980443 -4.62252 1.65556e-12
   rotation 0 0 1 1.55116
   name "door214"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation -1.59748 4.55835 8.88178e-14
   rotation 0 0 1 1.5757
   name "door201"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation -6.01522 4.54112 8.88178e-14
   rotation 0 0 1 1.5757
   name "door203"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation -2.49089 -2.19616 8.52651e-14
   rotation 0 0 -1 1.56098
   name "door211"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation -6.01037 -2.18821 8.52651e-14
   rotation 0 0 -1 1.56098
   name "door209"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation -7.10836 -1.40424 -6.83898e-14
   rotation 0 0 -1 3.13178
   name "door207"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation -7.11282 3.3144 -2.15828e-13
   rotation 0 0 -1 3.13178
   name "door205"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
 }
 Door {
+  hidden translation_4 0.0011631159893895626 5.11361506372876e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation -9.65829 3.62171 2.4869e-14
   rotation 0 0 -1 5.16191e-08
   name "door206"
-  frameHeight 3
+  position -0.00034338359606112033
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation -0.307647 -1.11533 -1.06581e-14
   rotation 0 0 1 0.009817479999996362
   name "door213"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
 }
 Robot {
-  translation -24.8578 6.65377 -6.75019e-13
-  rotation 0 0 1 1.57571
+  translation 0.30000874751206 0.13814650293955869 0.09473168831452936
+  rotation 0.017373152076250238 -0.009965046273703872 0.999799415602799 2.1187522171445634
   children [
     Compass {
     }
@@ -780,23 +822,23 @@ Robot {
     }
     DEF CASTER_WHEEL HingeJoint {
       jointParameters HingeJointParameters {
-        position 1.7228018020506923
+        position 5.11424745743207
         axis 0 0 1
         anchor -0.1918 0 0
         staticFriction 0.05
       }
       endPoint Solid {
         translation -0.1918 0 0
-        rotation 0.9942512168286033 0.07571165120674049 0.07571171445945751 1.5765616112706138
+        rotation -0.14255100800599896 0.6998854063334637 0.6998854392812552 3.4247868104108745
         children [
           DEF casterWheelRim HingeJoint {
             jointParameters HingeJointParameters {
-              position -522.1173705907997
+              position -597.2818775126254
               anchor 0 -0.0521014 0.012843
             }
             endPoint Solid {
               translation 0 -0.0521014 0.012843
-              rotation 1 0 0 5.670195212285527
+              rotation 1 0 0 5.903911976614859
               children [
                 DEF CASTER_WHEEL_RIM_SHAPE Shape {
                   appearance PBRAppearance {
@@ -957,7 +999,7 @@ Robot {
     }
     DEF LEFT_WHEEL HingeJoint {
       jointParameters HingeJointParameters {
-        position 229.96601873481816
+        position 240.65471507170815
         axis 0 1 0
         anchor 0 0.165 0
       }
@@ -972,7 +1014,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0 0.165 0
-        rotation -0.665382156481679 0.6653822158236266 -0.33842738172528464 2.488936347580013
+        rotation -0.15870111355101735 0.15870118054149152 -0.9744885283328912 1.5966359333245763
         children [
           DEF BLACK_CYLINDER_SHAPE Shape {
             appearance PBRAppearance {
@@ -1235,7 +1277,7 @@ Robot {
     }
     DEF RIGHT_WHEEL HingeJoint {
       jointParameters HingeJointParameters {
-        position 109.97553806676223
+        position 144.37184215509853
         axis 0 1 0
         anchor 0 -0.165 0
       }
@@ -1250,7 +1292,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0 -0.165 0
-        rotation 0.5811222924963336 -0.5811223605310444 0.5697312377381394 4.177323953070147
+        rotation -0.6027020537169795 0.6027020584303231 0.5229727174616151 4.105305616756066
         children [
           DEF RIGHT_BLACK_CYLINDER_SHAPE Shape {
             appearance PBRAppearance {
@@ -3273,7 +3315,7 @@ Robot {
       -0.06 0 0.06
     ]
   }
-  controller "NavV3"
+  controller "Navigation_AStar"
 }
 Wall {
   translation -0.217648 1.13176 -1.68754e-13
@@ -3288,10 +3330,13 @@ Wall {
   size 0.2 12 2.4
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation 2.37517 -1.15332 -1.24345e-14
   rotation 0 0 -1 3.13178
   name "door216"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
@@ -3333,19 +3378,25 @@ Wall {
   size 0.2 12 2.4
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation -3.84982 -4.66881 1.68398e-12
   rotation 0 0 1 1.55116
   name "door212"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
 }
 Door {
+  hidden translation_4 0.0011631159893896736 5.11361506372876e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation -8.6459 -4.66272 1.66267e-12
   rotation 0 0 1 1.55116
   name "door210"
-  frameHeight 3
+  position -0.00034338359606114185
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
@@ -3358,10 +3409,13 @@ Pose {
   translation 1 6 0
 }
 Door {
+  hidden translation_4 0.001163115989389868 5.113615063756516e-05 1.5543122344752192e-15
+  hidden rotation_4 0 0 -1 0.00034338359663860604
   translation -8.49356 7.34376 1.5099e-13
   rotation 0 0 -0.9999999999999999 1.56588
   name "door204"
-  frameHeight 3
+  position -0.0003433835960615639
+  frameHeight 2.4
   doorAppearance GenericDoorAppearance {
     colorOverride 0.6 0.3 0.5
   }
